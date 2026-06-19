@@ -1,18 +1,18 @@
 import { useState } from "react";
 
 const COLORS = {
-  bg: "#0F1623",
-  card: "#162030",
-  slate: "#1E2A3A",
-  border: "#243040",
-  accent: "linear-gradient(135deg,#7C3AED,#EC4899)",
-  accentSolid: "#7C3AED",
-  accentPink: "#EC4899",
-  text: "#E8EDF5",
-  muted: "#6B7A99",
-  success: "#22D37A",
+  bg: "#F0F2F5",
+  card: "#FFFFFF",
+  slate: "#F7F9FC",
+  border: "#E4E8EF",
+  accent: "linear-gradient(135deg,#0064E0,#0094FF)",
+  accentSolid: "#0064E0",
+  accentPink: "#0094FF",
+  text: "#1C2B33",
+  muted: "#65676B",
+  success: "#22C55E",
   warning: "#F5A623",
-  error: "#FF4D6D",
+  error: "#E4434B",
 };
 
 const DAYS = ["Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo"];
@@ -136,17 +136,14 @@ function AuthScreen({ onLogin }) {
     <div style={{minHeight:"100vh",background:COLORS.bg,display:"flex",alignItems:"center",justifyContent:"center",fontFamily:"'Inter',sans-serif",padding:20}}>
       <div style={{width:"100%",maxWidth:420}}>
         <div style={{textAlign:"center",marginBottom:36}}>
-          <div style={{display:"inline-flex",alignItems:"center",gap:10,background:COLORS.accent,borderRadius:16,padding:"10px 20px"}}>
-            <span style={{fontSize:22}}>📅</span>
-            <span style={{color:"#fff",fontWeight:800,fontSize:20,letterSpacing:-.5}}>PostFlow</span>
-          </div>
-          <p style={{color:COLORS.muted,marginTop:10,fontSize:14}}>Programa tus posts de Instagram con inteligencia</p>
+          <img src="/logo.png" alt="Social Gestión" style={{height:64,width:"auto"}} />
+          <p style={{color:COLORS.muted,marginTop:14,fontSize:14}}>Automatiza tus redes sociales sin esfuerzo</p>
         </div>
-        <div style={{background:COLORS.card,borderRadius:20,padding:32,border:`1px solid ${COLORS.border}`}}>
+        <div style={{background:COLORS.card,borderRadius:20,padding:32,boxShadow:"0 4px 16px rgba(0,0,0,0.08)",border:`1px solid ${COLORS.border}`}}>
           <div style={{display:"flex",background:COLORS.slate,borderRadius:10,padding:4,marginBottom:28}}>
             {["login","register"].map(m=>(
               <button key={m} onClick={()=>{setMode(m);setError("");}}
-                style={{flex:1,padding:"8px 0",borderRadius:8,border:"none",cursor:"pointer",fontWeight:600,fontSize:13,transition:"all .2s",background:mode===m?"#fff":"transparent",color:mode===m?COLORS.bg:COLORS.muted}}>
+                style={{flex:1,padding:"8px 0",borderRadius:8,border:"none",cursor:"pointer",fontWeight:600,fontSize:13,transition:"all .2s",background:mode===m?"#fff":"transparent",boxShadow:mode===m?"0 1px 3px rgba(0,0,0,0.1)":"none",color:mode===m?COLORS.accentSolid:COLORS.muted}}>
                 {m==="login"?"Iniciar sesión":"Crear cuenta"}
               </button>
             ))}
@@ -180,10 +177,7 @@ function Sidebar({ active, onNav, user, onLogout, collapsed }) {
   return (
     <div style={{width:collapsed?68:220,flexShrink:0,background:COLORS.card,borderRight:`1px solid ${COLORS.border}`,display:"flex",flexDirection:"column",transition:"width .2s",overflow:"hidden"}}>
       <div style={{padding:"20px 16px",borderBottom:`1px solid ${COLORS.border}`,display:"flex",alignItems:"center",gap:10}}>
-        <div style={{background:COLORS.accent,borderRadius:10,width:36,height:36,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
-          <span style={{fontSize:18}}>📅</span>
-        </div>
-        {!collapsed && <span style={{color:COLORS.text,fontWeight:800,fontSize:16,letterSpacing:-.5}}>PostFlow</span>}
+        <img src="/logo.png" alt="Social Gestión" style={{height:collapsed?32:36,width:"auto"}} />
       </div>
       <nav style={{flex:1,padding:"12px 8px"}}>
         {NAV.map(n=>(
@@ -220,7 +214,7 @@ function DashboardHome({ posts, igConnected }) {
   const thisWeek   = posts.filter(p=>p.status==="scheduled").slice(0,3);
 
   const Stat = ({icon,label,value,color=COLORS.accentSolid}) => (
-    <div style={{background:COLORS.card,border:`1px solid ${COLORS.border}`,borderRadius:16,padding:24,flex:1,minWidth:140}}>
+    <div style={{background:COLORS.card,border:`1px solid ${COLORS.border}`,boxShadow:"0 1px 3px rgba(0,0,0,0.06)",borderRadius:16,padding:24,flex:1,minWidth:140}}>
       <div style={{fontSize:28,marginBottom:8}}>{icon}</div>
       <p style={{color:COLORS.muted,fontSize:12,fontWeight:600,textTransform:"uppercase",letterSpacing:.8,margin:"0 0 4px"}}>{label}</p>
       <p style={{color,fontSize:32,fontWeight:800,margin:0,letterSpacing:-1}}>{value}</p>
@@ -236,7 +230,7 @@ function DashboardHome({ posts, igConnected }) {
         <Stat icon="✅" label="Publicados" value={published} color={COLORS.success} />
         <Stat icon="📸" label="Instagram" value={igConnected?"Conectado":"Sin conectar"} color={igConnected?COLORS.success:COLORS.warning}/>
       </div>
-      <div style={{background:COLORS.card,border:`1px solid ${COLORS.border}`,borderRadius:16,padding:24}}>
+      <div style={{background:COLORS.card,border:`1px solid ${COLORS.border}`,boxShadow:"0 1px 3px rgba(0,0,0,0.06)",borderRadius:16,padding:24}}>
         <h3 style={{color:COLORS.text,fontWeight:700,fontSize:16,marginBottom:16}}>Próximos posts</h3>
         {thisWeek.length===0 ? (
           <div style={{textAlign:"center",padding:"32px 0",color:COLORS.muted}}>
@@ -310,7 +304,7 @@ function SchedulePost({ onSave, igConnected }) {
     <div style={{maxWidth:600}}>
       <h2 style={{color:COLORS.text,fontWeight:800,fontSize:24,marginBottom:6}}>Programar nuevo post</h2>
       <p style={{color:COLORS.muted,marginBottom:28,fontSize:14}}>Elige el día, hora y contenido de tu publicación</p>
-      <div style={{background:COLORS.card,border:`1px solid ${COLORS.border}`,borderRadius:16,padding:28}}>
+      <div style={{background:COLORS.card,border:`1px solid ${COLORS.border}`,boxShadow:"0 1px 3px rgba(0,0,0,0.06)",borderRadius:16,padding:28}}>
         <div style={{marginBottom:18}}>
           <label style={{display:"block",color:COLORS.muted,fontSize:12,fontWeight:600,marginBottom:8,textTransform:"uppercase",letterSpacing:.8}}>Día de publicación</label>
           <div style={{display:"flex",flexWrap:"wrap",gap:8}}>
@@ -400,7 +394,7 @@ function PostsList({ posts, onDelete, onPublish }) {
       ) : (
         <div style={{display:"flex",flexDirection:"column",gap:12}}>
           {filtered.map(p=>(
-            <div key={p.id} style={{background:COLORS.card,border:`1px solid ${COLORS.border}`,borderRadius:14,padding:20,display:"flex",gap:16,alignItems:"flex-start"}}>
+            <div key={p.id} style={{background:COLORS.card,border:`1px solid ${COLORS.border}`,boxShadow:"0 1px 3px rgba(0,0,0,0.06)",borderRadius:14,padding:20,display:"flex",gap:16,alignItems:"flex-start"}}>
               <div style={{width:52,height:52,borderRadius:12,background:COLORS.accent,display:"flex",alignItems:"center",justifyContent:"center",fontSize:24,flexShrink:0}}>📸</div>
               <div style={{flex:1,minWidth:0}}>
                 <p style={{color:COLORS.text,fontSize:14,fontWeight:500,margin:"0 0 4px",lineHeight:1.5,display:"-webkit-box",WebkitLineClamp:2,WebkitBoxOrient:"vertical",overflow:"hidden"}}>{p.caption}</p>
@@ -485,7 +479,7 @@ function InstagramConnect({ igConnected, onConnect, onDisconnect, igUser }) {
     <div>
       <h2 style={{color:COLORS.text,fontWeight:800,fontSize:24,marginBottom:6}}>Conectar Instagram</h2>
       <p style={{color:COLORS.muted,marginBottom:28,fontSize:14}}>Conecta tu Instagram Business via Ayrshare</p>
-      <div style={{background:COLORS.card,border:`1px solid ${COLORS.border}`,borderRadius:16,padding:28,maxWidth:580}}>
+      <div style={{background:COLORS.card,border:`1px solid ${COLORS.border}`,boxShadow:"0 1px 3px rgba(0,0,0,0.06)",borderRadius:16,padding:28,maxWidth:580}}>
         <div style={{display:"flex",flexDirection:"column",gap:14,marginBottom:24}}>
           {[
             "Ve a app.ayrshare.com e inicia sesión con tu cuenta.",
@@ -520,7 +514,7 @@ function Settings({ user }) {
     <div style={{maxWidth:520}}>
       <h2 style={{color:COLORS.text,fontWeight:800,fontSize:24,marginBottom:6}}>Ajustes de cuenta</h2>
       <p style={{color:COLORS.muted,marginBottom:28,fontSize:14}}>Personaliza tu perfil y preferencias</p>
-      <div style={{background:COLORS.card,border:`1px solid ${COLORS.border}`,borderRadius:16,padding:28,marginBottom:20}}>
+      <div style={{background:COLORS.card,border:`1px solid ${COLORS.border}`,boxShadow:"0 1px 3px rgba(0,0,0,0.06)",borderRadius:16,padding:28,marginBottom:20}}>
         <h3 style={{color:COLORS.text,fontWeight:700,fontSize:16,marginBottom:20}}>Información personal</h3>
         <Input label="Nombre" value={name} onChange={setName} />
         <div style={{marginBottom:18}}>
@@ -535,7 +529,7 @@ function Settings({ user }) {
           {saved && <span style={{color:COLORS.success,fontSize:13,fontWeight:600}}>✅ Guardado</span>}
         </div>
       </div>
-      <div style={{background:COLORS.card,border:`1px solid ${COLORS.border}`,borderRadius:16,padding:28}}>
+      <div style={{background:COLORS.card,border:`1px solid ${COLORS.border}`,boxShadow:"0 1px 3px rgba(0,0,0,0.06)",borderRadius:16,padding:28}}>
         <h3 style={{color:COLORS.text,fontWeight:700,fontSize:16,marginBottom:16}}>Seguridad</h3>
         <Input label="Contraseña actual" type="password" value="" onChange={()=>{}} placeholder="••••••••" />
         <Input label="Nueva contraseña" type="password" value="" onChange={()=>{}} placeholder="••••••••" />
@@ -598,4 +592,3 @@ export default function App() {
     </div>
   );
 }
-
