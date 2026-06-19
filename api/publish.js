@@ -1,42 +1,63 @@
-// api/publish.js — Vercel Serverless Function
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const { caption, imageUrl, platforms = ["instagram"] } = req.body;
+  const { caption, imageUrl } = req.body;
 
-  if (!caption) {
-    return res.status(400).json({ error: "Caption es requerido" });
+  if (!caption || !imageUrl) {
+    return res.status(400).json({ error: "caption e imageUrl son requeridos" });
   }
 
+  const IG_ID = process.env.IG_BUSINESS_ID;
+  const TOKEN = process.env.META_ACCESS_TOKEN;
+
   try {
-    const body = {
-      post: caption,
-      platforms,
-    };
+    const containerRes = await fetch(
+      `https://graph.facebook.com/v19.0/${IG_ID}/media`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          image_url: imageUrl,
+          caption: caption,
+          access_token: TOKEN,
+        }),
+      }
+    );
 
-    if (imageUrl) {
-      body.mediaUrls = [imageUrl];
+    const containerData = await containerRes.json();
+
+    if (!containerRes.ok) {
+      return res.status(containerRes.status).json({
+        error: containerData.error?.message || "Error al crear el contenedor de media",
+      });
     }
 
-    const response = await fetch("https://app.ayrshare.com/api/post", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${process.env.AYRSHARE_API_KEY}`,
-      },
-      body: JSON.stringify(body),
-    });
+    const creationId = containerData.id;
 
-    const data = await response.json();
+    const publishRes = await fetch(
+      `https://graph.facebook.com/v19.0/${IG_ID}/media_publish`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          creation_id: creationId,
+          access_token: TOKEN,
+        }),
+      }
+    );
 
-    if (!response.ok) {
-      return res.status(response.status).json({ error: data.message || "Error al publicar" });
+    const publishData = await publishRes.json();
+
+    if (!publishRes.ok) {
+      return res.status(publishRes.status).json({
+        error: publishData.error?.message || "Error al publicar",
+      });
     }
 
-    return res.status(200).json({ success: true, data });
+    return res.status(200).json({ success: true, data: publishData });
   } catch (error) {
-    return res.status(500).json({ error: "Error interno del servidor" });
+    return res.status(500).json({ error: "Error interno del servidor: " + error.message });
   }
 }
