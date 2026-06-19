@@ -136,7 +136,7 @@ function AuthScreen({ onLogin }) {
     <div style={{minHeight:"100vh",background:COLORS.bg,display:"flex",alignItems:"center",justifyContent:"center",fontFamily:"'Inter',sans-serif",padding:20}}>
       <div style={{width:"100%",maxWidth:420}}>
         <div style={{textAlign:"center",marginBottom:36}}>
-          <img src="/logo.png" alt="Social Gestión" style={{height:64,width:"auto"}} />
+          <img src="/logo.png" alt="Social Gestión" style={{height:160,width:"auto",filter:"drop-shadow(0 4px 12px rgba(0,100,224,0.18))"}} />
           <p style={{color:COLORS.muted,marginTop:14,fontSize:14}}>Automatiza tus redes sociales sin esfuerzo</p>
         </div>
         <div style={{background:COLORS.card,borderRadius:20,padding:32,boxShadow:"0 4px 16px rgba(0,0,0,0.08)",border:`1px solid ${COLORS.border}`}}>
@@ -177,7 +177,7 @@ function Sidebar({ active, onNav, user, onLogout, collapsed }) {
   return (
     <div style={{width:collapsed?68:220,flexShrink:0,background:COLORS.card,borderRight:`1px solid ${COLORS.border}`,display:"flex",flexDirection:"column",transition:"width .2s",overflow:"hidden"}}>
       <div style={{padding:"20px 16px",borderBottom:`1px solid ${COLORS.border}`,display:"flex",alignItems:"center",gap:10}}>
-        <img src="/logo.png" alt="Social Gestión" style={{height:collapsed?32:36,width:"auto"}} />
+        <img src="/logo.png" alt="Social Gestión" style={{height:collapsed?44:56,width:"auto",filter:"drop-shadow(0 2px 6px rgba(0,100,224,0.15))"}} />
       </div>
       <nav style={{flex:1,padding:"12px 8px"}}>
         {NAV.map(n=>(
