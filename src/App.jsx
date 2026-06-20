@@ -21,7 +21,6 @@ const DAY_TO_NUMBER = {
   "Lunes":1,"Martes":2,"Miércoles":3,"Jueves":4,"Viernes":5,"Sábado":6,"Domingo":0
 };
 
-// Convierte día+hora a fecha ISO próxima
 function getNextDateForDay(dayName, time) {
   const today = new Date();
   const targetDay = DAY_TO_NUMBER[dayName];
@@ -37,56 +36,26 @@ function getNextDateForDay(dayName, time) {
 const Avatar = ({ name }) => {
   const initials = name.split(" ").map(w => w[0]).join("").slice(0,2).toUpperCase();
   return (
-    <div style={{
-      width:36,height:36,borderRadius:"50%",
-      background:COLORS.accent,display:"flex",alignItems:"center",
-      justifyContent:"center",fontWeight:700,fontSize:13,color:"#fff",flexShrink:0
-    }}>{initials}</div>
+    <div style={{width:36,height:36,borderRadius:"50%",background:COLORS.accent,display:"flex",alignItems:"center",justifyContent:"center",fontWeight:700,fontSize:13,color:"#fff",flexShrink:0}}>{initials}</div>
   );
 };
 
 const Badge = ({ children, color = COLORS.accentSolid }) => (
-  <span style={{
-    background: color + "22", color, border:`1px solid ${color}44`,
-    borderRadius:20,padding:"2px 10px",fontSize:11,fontWeight:600
-  }}>{children}</span>
+  <span style={{background:color+"22",color,border:`1px solid ${color}44`,borderRadius:20,padding:"2px 10px",fontSize:11,fontWeight:600}}>{children}</span>
 );
 
 const Btn = ({ children, onClick, variant="primary", style={}, disabled=false }) => {
-  const base = {
-    padding:"10px 20px",borderRadius:10,fontWeight:600,fontSize:14,
-    cursor:disabled?"not-allowed":"pointer",border:"none",transition:"opacity .15s",
-    opacity: disabled ? 0.5 : 1, ...style
-  };
-  if (variant==="primary") return (
-    <button onClick={onClick} disabled={disabled} style={{...base,background:COLORS.accent,color:"#fff"}}>
-      {children}
-    </button>
-  );
-  if (variant==="ghost") return (
-    <button onClick={onClick} disabled={disabled} style={{...base,background:"transparent",color:COLORS.muted,border:`1px solid ${COLORS.border}`}}>
-      {children}
-    </button>
-  );
-  if (variant==="danger") return (
-    <button onClick={onClick} disabled={disabled} style={{...base,background:COLORS.error+"22",color:COLORS.error,border:`1px solid ${COLORS.error}44`}}>
-      {children}
-    </button>
-  );
+  const base = {padding:"10px 20px",borderRadius:10,fontWeight:600,fontSize:14,cursor:disabled?"not-allowed":"pointer",border:"none",transition:"opacity .15s",opacity:disabled?0.5:1,...style};
+  if (variant==="primary") return <button onClick={onClick} disabled={disabled} style={{...base,background:COLORS.accent,color:"#fff"}}>{children}</button>;
+  if (variant==="ghost") return <button onClick={onClick} disabled={disabled} style={{...base,background:"transparent",color:COLORS.muted,border:`1px solid ${COLORS.border}`}}>{children}</button>;
+  if (variant==="danger") return <button onClick={onClick} disabled={disabled} style={{...base,background:COLORS.error+"22",color:COLORS.error,border:`1px solid ${COLORS.error}44`}}>{children}</button>;
 };
 
 const Input = ({ label, type="text", value, onChange, placeholder, hint }) => (
   <div style={{marginBottom:18}}>
     {label && <label style={{display:"block",color:COLORS.muted,fontSize:12,fontWeight:600,marginBottom:6,textTransform:"uppercase",letterSpacing:.8}}>{label}</label>}
-    <input
-      type={type} value={value} onChange={e=>onChange(e.target.value)}
-      placeholder={placeholder}
-      style={{
-        width:"100%",background:COLORS.slate,border:`1px solid ${COLORS.border}`,
-        borderRadius:10,padding:"12px 14px",color:COLORS.text,fontSize:14,
-        outline:"none",boxSizing:"border-box"
-      }}
-    />
+    <input type={type} value={value} onChange={e=>onChange(e.target.value)} placeholder={placeholder}
+      style={{width:"100%",background:COLORS.slate,border:`1px solid ${COLORS.border}`,borderRadius:10,padding:"12px 14px",color:COLORS.text,fontSize:14,outline:"none",boxSizing:"border-box"}}/>
     {hint && <p style={{color:COLORS.muted,fontSize:11,marginTop:5}}>{hint}</p>}
   </div>
 );
@@ -94,19 +63,11 @@ const Input = ({ label, type="text", value, onChange, placeholder, hint }) => (
 const Textarea = ({ label, value, onChange, placeholder, rows=4 }) => (
   <div style={{marginBottom:18}}>
     {label && <label style={{display:"block",color:COLORS.muted,fontSize:12,fontWeight:600,marginBottom:6,textTransform:"uppercase",letterSpacing:.8}}>{label}</label>}
-    <textarea
-      value={value} onChange={e=>onChange(e.target.value)}
-      placeholder={placeholder} rows={rows}
-      style={{
-        width:"100%",background:COLORS.slate,border:`1px solid ${COLORS.border}`,
-        borderRadius:10,padding:"12px 14px",color:COLORS.text,fontSize:14,
-        outline:"none",resize:"vertical",boxSizing:"border-box",fontFamily:"inherit"
-      }}
-    />
+    <textarea value={value} onChange={e=>onChange(e.target.value)} placeholder={placeholder} rows={rows}
+      style={{width:"100%",background:COLORS.slate,border:`1px solid ${COLORS.border}`,borderRadius:10,padding:"12px 14px",color:COLORS.text,fontSize:14,outline:"none",resize:"vertical",boxSizing:"border-box",fontFamily:"inherit"}}/>
   </div>
 );
 
-// ── AUTH SCREEN ───────────────────────────────────────────
 function AuthScreen({ onLogin }) {
   const [mode, setMode] = useState("login");
   const [form, setForm] = useState({ name:"", email:"", password:"", confirm:"" });
@@ -164,7 +125,6 @@ function AuthScreen({ onLogin }) {
   );
 }
 
-// ── SIDEBAR ───────────────────────────────────────────────
 const NAV = [
   { id:"dashboard", icon:"📊", label:"Dashboard" },
   { id:"schedule",  icon:"📅", label:"Programar post" },
@@ -207,12 +167,10 @@ function Sidebar({ active, onNav, user, onLogout, collapsed }) {
   );
 }
 
-// ── DASHBOARD HOME ────────────────────────────────────────
 function DashboardHome({ posts, igConnected }) {
   const scheduled = posts.filter(p=>p.status==="scheduled").length;
   const published  = posts.filter(p=>p.status==="published").length;
   const thisWeek   = posts.filter(p=>p.status==="scheduled").slice(0,3);
-
   const Stat = ({icon,label,value,color=COLORS.accentSolid}) => (
     <div style={{background:COLORS.card,border:`1px solid ${COLORS.border}`,boxShadow:"0 1px 3px rgba(0,0,0,0.06)",borderRadius:16,padding:24,flex:1,minWidth:140}}>
       <div style={{fontSize:28,marginBottom:8}}>{icon}</div>
@@ -220,7 +178,6 @@ function DashboardHome({ posts, igConnected }) {
       <p style={{color,fontSize:32,fontWeight:800,margin:0,letterSpacing:-1}}>{value}</p>
     </div>
   );
-
   return (
     <div>
       <h2 style={{color:COLORS.text,fontWeight:800,fontSize:24,marginBottom:6}}>Panel principal</h2>
@@ -252,20 +209,17 @@ function DashboardHome({ posts, igConnected }) {
   );
 }
 
-// ── SCHEDULE POST (con Ayrshare real) ─────────────────────
 function SchedulePost({ onSave, igConnected }) {
   const [day, setDay] = useState("");
   const [time, setTime] = useState("09:00");
   const [caption, setCaption] = useState("");
   const [imageUrl, setImageUrl] = useState("");
-  const [status, setStatus] = useState("idle"); // idle | loading | success | error
+  const [status, setStatus] = useState("idle");
   const [message, setMessage] = useState("");
 
   const handleSave = async () => {
     if (!day || !time || !caption) return;
-    setStatus("loading");
-    setMessage("");
-
+    setStatus("loading"); setMessage("");
     try {
       const scheduleDate = getNextDateForDay(day, time);
       const res = await fetch("/api/schedule", {
@@ -274,29 +228,19 @@ function SchedulePost({ onSave, igConnected }) {
         body: JSON.stringify({ caption, imageUrl, scheduleDate }),
       });
       const data = await res.json();
-
-      if (!res.ok) {
-        setStatus("error");
-        setMessage(data.error || "Error al programar el post.");
-        return;
-      }
-
-      onSave({ id: Date.now(), day, time, caption, imageUrl, status: "scheduled" });
-      setStatus("success");
-      setMessage("✅ ¡Post programado en Instagram!");
+      if (!res.ok) { setStatus("error"); setMessage(data.error || "Error al programar."); return; }
+      onSave({ id:Date.now(), day, time, caption, imageUrl, status:"scheduled" });
+      setStatus("success"); setMessage("✅ ¡Post programado!");
       setDay(""); setTime("09:00"); setCaption(""); setImageUrl("");
-      setTimeout(() => { setStatus("idle"); setMessage(""); }, 3000);
-    } catch {
-      setStatus("error");
-      setMessage("Error de conexión. Intenta de nuevo.");
-    }
+      setTimeout(()=>{ setStatus("idle"); setMessage(""); },3000);
+    } catch { setStatus("error"); setMessage("Error de conexión."); }
   };
 
   if (!igConnected) return (
     <div style={{textAlign:"center",padding:"60px 20px"}}>
       <div style={{fontSize:56,marginBottom:16}}>📸</div>
       <h3 style={{color:COLORS.text,fontWeight:700,fontSize:20,marginBottom:8}}>Conecta tu Instagram primero</h3>
-      <p style={{color:COLORS.muted,fontSize:14}}>Ve a la sección "Instagram" para vincular tu cuenta antes de programar posts.</p>
+      <p style={{color:COLORS.muted,fontSize:14}}>Ve a la sección "Instagram" para vincular tu cuenta.</p>
     </div>
   );
 
@@ -316,9 +260,10 @@ function SchedulePost({ onSave, igConnected }) {
             ))}
           </div>
         </div>
-        <Input label="Hora de publicación" type="time" value={time} onChange={setTime} hint="La hora se ajusta a la zona horaria de tu cuenta de Instagram." />
-        <Input label="URL de imagen (opcional)" value={imageUrl} onChange={setImageUrl} placeholder="https://ejemplo.com/imagen.jpg" />
-        <Textarea label="Descripción / Caption" value={caption} onChange={setCaption} placeholder="Escribe aquí tu caption, hashtags, emojis... 🎉 #marca #instagram" rows={5} />
+        <Input label="Hora de publicación" type="time" value={time} onChange={setTime} hint="La hora se ajusta a la zona horaria de tu cuenta." />
+        <Input label="URL de imagen" value={imageUrl} onChange={setImageUrl} placeholder="https://ejemplo.com/imagen.jpg"
+          hint="Instagram requiere una URL pública de imagen (jpg/png)." />
+        <Textarea label="Descripción / Caption" value={caption} onChange={setCaption} placeholder="Escribe tu caption, hashtags... 🎉 #marca" rows={5} />
         {(caption||imageUrl) && (
           <div style={{background:COLORS.slate,borderRadius:12,padding:16,marginBottom:20,border:`1px solid ${COLORS.border}`}}>
             <p style={{color:COLORS.muted,fontSize:11,fontWeight:600,marginBottom:8,textTransform:"uppercase"}}>Vista previa</p>
@@ -332,47 +277,44 @@ function SchedulePost({ onSave, igConnected }) {
           </div>
         )}
         <Btn onClick={handleSave} disabled={!day||!time||!caption||status==="loading"}>
-          {status==="loading" ? "⏳ Programando..." : "📅 Programar post"}
+          {status==="loading"?"⏳ Programando...":"📅 Programar post"}
         </Btn>
       </div>
     </div>
   );
 }
 
-// ── POSTS LIST (con Publicar ya real) ────────────────────
 function PostsList({ posts, onDelete, onPublish }) {
   const [filter, setFilter] = useState("all");
   const [publishing, setPublishing] = useState(null);
   const [pubMessage, setPubMessage] = useState("");
-  const filtered = posts.filter(p=> filter==="all" || p.status===filter);
+  const filtered = posts.filter(p=>filter==="all"||p.status===filter);
 
   const handlePublishNow = async (post) => {
-    setPublishing(post.id);
-    setPubMessage("");
+    if (!post.imageUrl) {
+      setPubMessage("❌ Este post no tiene imagen, no se puede publicar.");
+      setTimeout(()=>setPubMessage(""),3000);
+      return;
+    }
+    setPublishing(post.id); setPubMessage("");
     try {
       const res = await fetch("/api/publish", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ caption: post.caption, imageUrl: post.imageUrl }),
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({ caption:post.caption, imageUrl:post.imageUrl }),
       });
       const data = await res.json();
-      if (!res.ok) {
-        setPubMessage("❌ " + (data.error || "Error al publicar"));
-      } else {
-        onPublish(post.id);
-        setPubMessage("✅ ¡Publicado en Instagram!");
-      }
-    } catch {
-      setPubMessage("❌ Error de conexión.");
-    }
+      if (!res.ok) { setPubMessage("❌ "+(data.error||"Error al publicar")); }
+      else { onPublish(post.id); setPubMessage("✅ ¡Publicado en Instagram!"); }
+    } catch { setPubMessage("❌ Error de conexión."); }
     setPublishing(null);
-    setTimeout(() => setPubMessage(""), 3000);
+    setTimeout(()=>setPubMessage(""),3000);
   };
 
   return (
     <div>
       <h2 style={{color:COLORS.text,fontWeight:800,fontSize:24,marginBottom:6}}>Mis posts</h2>
-      <p style={{color:COLORS.muted,marginBottom:20,fontSize:14}}>Gestiona todos tus posts programados y publicados</p>
+      <p style={{color:COLORS.muted,marginBottom:20,fontSize:14}}>Gestiona todos tus posts</p>
       {pubMessage && (
         <div style={{background:pubMessage.startsWith("✅")?COLORS.success+"22":COLORS.error+"22",border:`1px solid ${pubMessage.startsWith("✅")?COLORS.success:COLORS.error}44`,borderRadius:8,padding:"10px 14px",color:pubMessage.startsWith("✅")?COLORS.success:COLORS.error,fontSize:13,marginBottom:16}}>
           {pubMessage}
@@ -397,19 +339,20 @@ function PostsList({ posts, onDelete, onPublish }) {
             <div key={p.id} style={{background:COLORS.card,border:`1px solid ${COLORS.border}`,boxShadow:"0 1px 3px rgba(0,0,0,0.06)",borderRadius:14,padding:20,display:"flex",gap:16,alignItems:"flex-start"}}>
               <div style={{width:52,height:52,borderRadius:12,background:COLORS.accent,display:"flex",alignItems:"center",justifyContent:"center",fontSize:24,flexShrink:0}}>📸</div>
               <div style={{flex:1,minWidth:0}}>
-                <p style={{color:COLORS.text,fontSize:14,fontWeight:500,margin:"0 0 4px",lineHeight:1.5,display:"-webkit-box",WebkitLineClamp:2,WebkitBoxOrient:"vertical",overflow:"hidden"}}>{p.caption}</p>
+                <p style={{color:COLORS.text,fontSize:14,fontWeight:500,margin:"0 0 4px",lineHeight:1.5}}>{p.caption}</p>
                 <div style={{display:"flex",gap:12,flexWrap:"wrap",marginTop:8,alignItems:"center"}}>
                   <span style={{color:COLORS.muted,fontSize:12}}>📅 {p.day}</span>
                   <span style={{color:COLORS.muted,fontSize:12}}>🕐 {p.time}</span>
                   <Badge color={p.status==="published"?COLORS.success:COLORS.accentSolid}>
                     {p.status==="published"?"Publicado":"Programado"}
                   </Badge>
+                  {!p.imageUrl && <span style={{color:COLORS.warning,fontSize:11}}>⚠️ Sin imagen</span>}
                 </div>
               </div>
               <div style={{display:"flex",gap:8,flexShrink:0}}>
                 {p.status==="scheduled" && (
                   <button onClick={()=>handlePublishNow(p)} disabled={publishing===p.id}
-                    style={{background:COLORS.success+"22",border:`1px solid ${COLORS.success}44`,color:COLORS.success,padding:"6px 12px",borderRadius:8,cursor:publishing===p.id?"not-allowed":"pointer",fontSize:12,fontWeight:600,opacity:publishing===p.id?0.6:1}}>
+                    style={{background:COLORS.success+"22",border:`1px solid ${COLORS.success}44`,color:COLORS.success,padding:"6px 12px",borderRadius:8,cursor:"pointer",fontSize:12,fontWeight:600}}>
                     {publishing===p.id?"Publicando...":"Publicar ya"}
                   </button>
                 )}
@@ -426,32 +369,26 @@ function PostsList({ posts, onDelete, onPublish }) {
   );
 }
 
-// ── INSTAGRAM CONNECT ─────────────────────────────────────
-function InstagramConnect({ igConnected, onConnect, onDisconnect, igUser }) {
-  const [step, setStep] = useState(1);
-  const [profileKey, setProfileKey] = useState("");
-  const [connecting, setConnecting] = useState(false);
+// ── INSTAGRAM CONNECT (via Meta API directa) ──────────────
+function InstagramConnect({ igConnected, onConnect, onDisconnect }) {
+  const [checking, setChecking] = useState(false);
   const [error, setError] = useState("");
 
-  const handleConnect = async () => {
-    if (!profileKey) return;
-    setConnecting(true);
+  const handleCheck = async () => {
+    setChecking(true);
     setError("");
     try {
-      const res = await fetch("https://app.ayrshare.com/api/profiles/profile", {
-        method: "GET",
-        headers: { "Authorization": `Bearer ${profileKey}` },
-      });
-      if (res.ok) {
-        const data = await res.json();
-        onConnect({ username: data.title || "@tu_cuenta", followers: "—" });
+      const res = await fetch("/api/check-instagram");
+      const data = await res.json();
+      if (res.ok && data.connected) {
+        onConnect();
       } else {
-        setError("Profile Key inválida. Verifica en Ayrshare.");
+        setError(data.error || "No se pudo verificar la conexión con Instagram.");
       }
     } catch {
-      onConnect({ username: "@tu_cuenta_instagram", followers: "—" });
+      setError("Error al verificar la conexión.");
     }
-    setConnecting(false);
+    setChecking(false);
   };
 
   if (igConnected) return (
@@ -462,15 +399,15 @@ function InstagramConnect({ igConnected, onConnect, onDisconnect, igUser }) {
         <div style={{display:"flex",alignItems:"center",gap:16,marginBottom:20}}>
           <div style={{width:56,height:56,borderRadius:"50%",background:"linear-gradient(135deg,#F58529,#DD2A7B,#8134AF)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:28}}>📸</div>
           <div>
-            <p style={{color:COLORS.text,fontWeight:700,fontSize:16,margin:"0 0 2px"}}>{igUser?.username}</p>
-            <p style={{color:COLORS.muted,fontSize:13,margin:0}}>Cuenta conectada via Ayrshare</p>
+            <p style={{color:COLORS.text,fontWeight:700,fontSize:16,margin:"0 0 2px"}}>Cuenta de Instagram Business</p>
+            <p style={{color:COLORS.muted,fontSize:13,margin:0}}>Conectada vía Meta Graph API</p>
           </div>
           <Badge color={COLORS.success}>Activo</Badge>
         </div>
         <div style={{background:COLORS.success+"11",border:`1px solid ${COLORS.success}22`,borderRadius:10,padding:12,marginBottom:20}}>
-          <p style={{color:COLORS.success,fontSize:13,margin:0}}>✅ Ayrshare conectado correctamente. Los posts se publicarán automáticamente.</p>
+          <p style={{color:COLORS.success,fontSize:13,margin:0}}>✅ Conectado directamente con la API de Meta. Los posts se publican de forma real en Instagram.</p>
         </div>
-        <Btn variant="danger" onClick={onDisconnect}>Desconectar cuenta</Btn>
+        <Btn variant="danger" onClick={onDisconnect}>Desconectar (solo local)</Btn>
       </div>
     </div>
   );
@@ -478,38 +415,25 @@ function InstagramConnect({ igConnected, onConnect, onDisconnect, igUser }) {
   return (
     <div>
       <h2 style={{color:COLORS.text,fontWeight:800,fontSize:24,marginBottom:6}}>Conectar Instagram</h2>
-      <p style={{color:COLORS.muted,marginBottom:28,fontSize:14}}>Conecta tu Instagram Business via Ayrshare</p>
+      <p style={{color:COLORS.muted,marginBottom:28,fontSize:14}}>Tu cuenta de Instagram Business ya está configurada en el servidor (Meta Graph API).</p>
       <div style={{background:COLORS.card,border:`1px solid ${COLORS.border}`,boxShadow:"0 1px 3px rgba(0,0,0,0.06)",borderRadius:16,padding:28,maxWidth:580}}>
-        <div style={{display:"flex",flexDirection:"column",gap:14,marginBottom:24}}>
-          {[
-            "Ve a app.ayrshare.com e inicia sesión con tu cuenta.",
-            "En el menú izquierdo, haz clic en 'Social Accounts'.",
-            "Conecta tu cuenta de Instagram Business ahí.",
-            "Copia tu Profile Key desde Settings → API Key.",
-          ].map((t,i)=>(
-            <div key={i} style={{display:"flex",gap:12,alignItems:"flex-start"}}>
-              <div style={{width:24,height:24,borderRadius:"50%",background:COLORS.accentSolid+"44",color:COLORS.accentSolid,display:"flex",alignItems:"center",justifyContent:"center",fontSize:12,fontWeight:700,flexShrink:0,marginTop:1}}>{i+1}</div>
-              <p style={{color:COLORS.text,fontSize:14,margin:0,lineHeight:1.6}}>{t}</p>
-            </div>
-          ))}
-        </div>
+        <p style={{color:COLORS.text,fontSize:14,lineHeight:1.6,marginBottom:20}}>
+          La conexión con Instagram se configura desde las variables de entorno del servidor. Haz clic en el botón para verificar que todo esté correcto.
+        </p>
         {error && <div style={{background:COLORS.error+"22",border:`1px solid ${COLORS.error}44`,borderRadius:8,padding:"10px 14px",color:COLORS.error,fontSize:13,marginBottom:16}}>{error}</div>}
-        <Input label="Profile Key de Ayrshare" type="password" value={profileKey} onChange={setProfileKey} placeholder="Tu profile key de Ayrshare" />
-        <Btn onClick={handleConnect} disabled={!profileKey||connecting}>
-          {connecting?"Verificando...":"🔗 Conectar Instagram"}
+        <Btn onClick={handleCheck} disabled={checking}>
+          {checking?"Verificando...":"🔗 Verificar conexión"}
         </Btn>
       </div>
     </div>
   );
 }
 
-// ── SETTINGS ──────────────────────────────────────────────
 function Settings({ user }) {
   const [name, setName] = useState(user.name);
   const [timezone, setTimezone] = useState("America/Buenos_Aires");
   const [saved, setSaved] = useState(false);
   const zones = ["America/Mexico_City","America/Bogota","America/Lima","America/Santiago","America/Buenos_Aires","Europe/Madrid","America/New_York","America/Los_Angeles"];
-
   return (
     <div style={{maxWidth:520}}>
       <h2 style={{color:COLORS.text,fontWeight:800,fontSize:24,marginBottom:6}}>Ajustes de cuenta</h2>
@@ -529,28 +453,19 @@ function Settings({ user }) {
           {saved && <span style={{color:COLORS.success,fontSize:13,fontWeight:600}}>✅ Guardado</span>}
         </div>
       </div>
-      <div style={{background:COLORS.card,border:`1px solid ${COLORS.border}`,boxShadow:"0 1px 3px rgba(0,0,0,0.06)",borderRadius:16,padding:28}}>
-        <h3 style={{color:COLORS.text,fontWeight:700,fontSize:16,marginBottom:16}}>Seguridad</h3>
-        <Input label="Contraseña actual" type="password" value="" onChange={()=>{}} placeholder="••••••••" />
-        <Input label="Nueva contraseña" type="password" value="" onChange={()=>{}} placeholder="••••••••" />
-        <Input label="Confirmar nueva contraseña" type="password" value="" onChange={()=>{}} placeholder="••••••••" />
-        <Btn onClick={()=>{}}>Cambiar contraseña</Btn>
-      </div>
     </div>
   );
 }
 
-// ── APP ROOT ──────────────────────────────────────────────
 export default function App() {
   const [user, setUser] = useState(null);
   const [page, setPage] = useState("dashboard");
   const [posts, setPosts] = useState([
-    { id:1, day:"Lunes",    time:"09:00", caption:"¡Buenos días! Comenzamos la semana con energía 🌟 #motivación #lunes", status:"scheduled" },
-    { id:2, day:"Miércoles",time:"18:30", caption:"A mitad de semana, recuerda tus metas 💪 #midweek #goals",             status:"scheduled" },
-    { id:3, day:"Viernes",  time:"12:00", caption:"¡Feliz viernes! Un fin de semana increíble les espera 🎉 #viernes",    status:"published" },
+    { id:1, day:"Lunes",    time:"09:00", caption:"¡Buenos días! Comenzamos la semana con energía 🌟 #motivación", imageUrl:"", status:"scheduled" },
+    { id:2, day:"Miércoles",time:"18:30", caption:"A mitad de semana, recuerda tus metas 💪 #goals",              imageUrl:"", status:"scheduled" },
+    { id:3, day:"Viernes",  time:"12:00", caption:"¡Feliz viernes! 🎉 #viernes",                                   imageUrl:"", status:"published" },
   ]);
   const [igConnected, setIgConnected] = useState(false);
-  const [igUser, setIgUser] = useState(null);
   const [collapsed, setCollapsed] = useState(false);
 
   if (!user) return <AuthScreen onLogin={setUser}/>;
@@ -558,14 +473,14 @@ export default function App() {
   const addPost = (p) => setPosts(prev=>[p,...prev]);
   const deletePost = (id) => setPosts(prev=>prev.filter(p=>p.id!==id));
   const publishPost = (id) => setPosts(prev=>prev.map(p=>p.id===id?{...p,status:"published"}:p));
-  const connectIg = (info) => { setIgConnected(true); setIgUser(info); };
-  const disconnectIg = () => { setIgConnected(false); setIgUser(null); };
+  const connectIg = () => setIgConnected(true);
+  const disconnectIg = () => setIgConnected(false);
 
   const pages = {
     dashboard: <DashboardHome posts={posts} igConnected={igConnected}/>,
     schedule:  <SchedulePost onSave={addPost} igConnected={igConnected}/>,
     posts:     <PostsList posts={posts} onDelete={deletePost} onPublish={publishPost}/>,
-    instagram: <InstagramConnect igConnected={igConnected} onConnect={connectIg} onDisconnect={disconnectIg} igUser={igUser}/>,
+    instagram: <InstagramConnect igConnected={igConnected} onConnect={connectIg} onDisconnect={disconnectIg}/>,
     settings:  <Settings user={user}/>,
   };
 
@@ -575,9 +490,7 @@ export default function App() {
       <div style={{flex:1,display:"flex",flexDirection:"column",overflow:"hidden"}}>
         <div style={{background:COLORS.card,borderBottom:`1px solid ${COLORS.border}`,padding:"16px 28px",display:"flex",alignItems:"center",gap:16,flexShrink:0}}>
           <button onClick={()=>setCollapsed(c=>!c)}
-            style={{background:"transparent",border:`1px solid ${COLORS.border}`,borderRadius:8,width:34,height:34,cursor:"pointer",color:COLORS.muted,fontSize:16}}>
-            ☰
-          </button>
+            style={{background:"transparent",border:`1px solid ${COLORS.border}`,borderRadius:8,width:34,height:34,cursor:"pointer",color:COLORS.muted,fontSize:16}}>☰</button>
           <div style={{flex:1}}/>
           <div style={{display:"flex",alignItems:"center",gap:10}}>
             <div style={{width:8,height:8,borderRadius:"50%",background:igConnected?COLORS.success:COLORS.muted}}/>
@@ -585,9 +498,7 @@ export default function App() {
           </div>
           <Avatar name={user.name}/>
         </div>
-        <div style={{flex:1,overflow:"auto",padding:32}}>
-          {pages[page]}
-        </div>
+        <div style={{flex:1,overflow:"auto",padding:32}}>{pages[page]}</div>
       </div>
     </div>
   );
