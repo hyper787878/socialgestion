@@ -115,4 +115,103 @@ function HomeTab({ user }) {
           <div key={card.label} style={{ background: "#1e293b", borderRadius: "16px", padding: "24px" }}>
             <div style={{ fontSize: "32px", marginBottom: "12px" }}>{card.icon}</div>
             <div style={{ color: card.color, fontSize: "32px", fontWeight: "700" }}>{card.value}</div>
-            <div style={{ color: "#94a3b8", fontSize:
+            <div style={{ color: "#94a3b8", fontSize: "14px", marginTop: "4px" }}>{card.label}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function ConnectTab() {
+  const networks = [
+    { id: "instagram", name: "Instagram", icon: "📸", color: "#e1306c", description: "Connect your Instagram Business account" },
+    { id: "facebook", name: "Facebook", icon: "👤", color: "#1877f2", description: "Connect your Facebook Page" },
+    { id: "whatsapp", name: "WhatsApp", icon: "💬", color: "#25d366", description: "Connect your WhatsApp Business" },
+  ]
+  return (
+    <div>
+      <h2 style={{ color: "#f1f5f9", fontSize: "28px", fontWeight: "700", margin: "0 0 8px" }}>Connect Accounts</h2>
+      <p style={{ color: "#94a3b8", margin: "0 0 32px" }}>Link your social media accounts to start publishing</p>
+      <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+        {networks.map(n => (
+          <div key={n.id} style={{ background: "#1e293b", borderRadius: "16px", padding: "24px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+              <div style={{ width: "48px", height: "48px", background: n.color + "22", borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "24px" }}>{n.icon}</div>
+              <div>
+                <div style={{ color: "#f1f5f9", fontWeight: "700", fontSize: "16px" }}>{n.name}</div>
+                <div style={{ color: "#94a3b8", fontSize: "13px" }}>{n.description}</div>
+              </div>
+            </div>
+            <button style={{ padding: "10px 20px", background: n.color, border: "none", borderRadius: "10px", color: "white", fontWeight: "700", cursor: "pointer", fontSize: "14px" }}>Connect</button>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function ScheduleTab() {
+  return (
+    <div>
+      <h2 style={{ color: "#f1f5f9", fontSize: "28px", fontWeight: "700", margin: "0 0 8px" }}>Schedule Post</h2>
+      <p style={{ color: "#94a3b8", margin: "0 0 32px" }}>Create and schedule posts for your connected accounts</p>
+      <div style={{ background: "#1e293b", borderRadius: "16px", padding: "32px", maxWidth: "600px" }}>
+        <p style={{ color: "#64748b", textAlign: "center", margin: "40px 0" }}>Connect a social account first to start scheduling posts</p>
+      </div>
+    </div>
+  )
+}
+
+function PostsTab() {
+  return (
+    <div>
+      <h2 style={{ color: "#f1f5f9", fontSize: "28px", fontWeight: "700", margin: "0 0 8px" }}>My Posts</h2>
+      <p style={{ color: "#94a3b8", margin: "0 0 32px" }}>All your scheduled and published posts</p>
+      <div style={{ background: "#1e293b", borderRadius: "16px", padding: "32px", textAlign: "center" }}>
+        <p style={{ color: "#64748b", margin: "40px 0" }}>No posts yet. Schedule your first post!</p>
+      </div>
+    </div>
+  )
+}
+
+function SettingsTab({ user }) {
+  return (
+    <div>
+      <h2 style={{ color: "#f1f5f9", fontSize: "28px", fontWeight: "700", margin: "0 0 32px" }}>Settings</h2>
+      <div style={{ background: "#1e293b", borderRadius: "16px", padding: "24px", maxWidth: "500px" }}>
+        <div style={{ marginBottom: "20px" }}>
+          <label style={{ color: "#94a3b8", fontSize: "13px", fontWeight: "600" }}>EMAIL</label>
+          <div style={{ color: "#f1f5f9", marginTop: "4px" }}>{user.email}</div>
+        </div>
+        <div>
+          <label style={{ color: "#94a3b8", fontSize: "13px", fontWeight: "600" }}>PLAN</label>
+          <div style={{ color: "#3b82f6", marginTop: "4px", fontWeight: "700" }}>Starter</div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// Main App
+export default function App() {
+  const [session, setSession] = useState(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session)
+      setLoading(false)
+    })
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session)
+    })
+    return () => subscription.unsubscribe()
+  }, [])
+
+  if (loading) return <div style={{ minHeight: "100vh", background: "#0f172a", display: "flex", alignItems: "center", justifyContent: "center", color: "#94a3b8", fontFamily: "system-ui" }}>Loading...</div>
+
+  if (!session) return <AuthScreen />
+
+  return <Dashboard user={session.user} onSignOut={() => supabase.auth.signOut()} />
+}
