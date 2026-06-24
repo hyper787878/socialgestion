@@ -159,7 +159,7 @@ function ConnectTab({ user, connectedAccounts, onRefresh }) {
   const handleConnect = (platform) => {
     if (platform === "instagram") {
       const authUrl = `https://api.instagram.com/oauth/authorize?` +
-        `client_id=1323697139477815` +
+        `client_id=2263603634045697` +
         `&redirect_uri=https://socialgestion.vercel.app/auth/callback` +
         `&scope=instagram_business_basic,instagram_content_publish,instagram_manage_comments,instagram_manage_messages` +
         `&response_type=code` +
