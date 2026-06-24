@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react"
 import { supabase } from "./supabaseClient"
 
-// Auth Screen
-function AuthScreen({ onAuth }) {
+function AuthScreen() {
   const [isLogin, setIsLogin] = useState(true)
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -34,8 +33,8 @@ function AuthScreen({ onAuth }) {
     <div style={{ minHeight: "100vh", background: "#0f172a", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "system-ui, sans-serif" }}>
       <div style={{ background: "#1e293b", padding: "40px", borderRadius: "16px", width: "100%", maxWidth: "400px", boxShadow: "0 25px 50px rgba(0,0,0,0.5)" }}>
         <div style={{ textAlign: "center", marginBottom: "32px" }}>
-          <div style={{ width: "56px", height: "56px", background: "linear-gradient(135deg, #3b82f6, #8b5cf6)", borderRadius: "16px", margin: "0 auto 16px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "24px" }}>⚡</div>
-          <h1 style={{ color: "#f1f5f9", fontSize: "24px", fontWeight: "700", margin: "0 0 4px" }}>Social Gestión</h1>
+          <img src="/logo.png" style={{ width: "56px", height: "56px", margin: "0 auto 16px", display: "block" }} />
+          <h1 style={{ color: "#f1f5f9", fontSize: "24px", fontWeight: "700", margin: "0 0 4px" }}>Social Gestion</h1>
           <p style={{ color: "#94a3b8", fontSize: "14px", margin: 0 }}>Manage all your social media in one place</p>
         </div>
 
@@ -60,7 +59,6 @@ function AuthScreen({ onAuth }) {
   )
 }
 
-// Dashboard
 function Dashboard({ user, onSignOut }) {
   const [tab, setTab] = useState("home")
 
@@ -74,11 +72,10 @@ function Dashboard({ user, onSignOut }) {
 
   return (
     <div style={{ minHeight: "100vh", background: "#0f172a", fontFamily: "system-ui, sans-serif", display: "flex" }}>
-      {/* Sidebar */}
       <div style={{ width: "240px", background: "#1e293b", padding: "24px 16px", display: "flex", flexDirection: "column" }}>
         <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "32px", padding: "0 8px" }}>
-          <div style={{ width: "36px", height: "36px", background: "linear-gradient(135deg, #3b82f6, #8b5cf6)", borderRadius: "10px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "18px" }}>⚡</div>
-          <span style={{ color: "#f1f5f9", fontWeight: "700", fontSize: "16px" }}>Social Gestión</span>
+          <img src="/logo.png" style={{ width: "36px", height: "36px" }} />
+          <span style={{ color: "#f1f5f9", fontWeight: "700", fontSize: "16px" }}>Social Gestion</span>
         </div>
 
         {tabs.map(t => (
@@ -93,7 +90,6 @@ function Dashboard({ user, onSignOut }) {
         </div>
       </div>
 
-      {/* Main */}
       <div style={{ flex: 1, padding: "32px" }}>
         {tab === "home" && <HomeTab user={user} />}
         {tab === "connect" && <ConnectTab />}
@@ -193,7 +189,6 @@ function SettingsTab({ user }) {
   )
 }
 
-// Main App
 export default function App() {
   const [session, setSession] = useState(null)
   const [loading, setLoading] = useState(true)
