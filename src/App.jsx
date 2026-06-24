@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react"
 import { supabase } from "./supabaseClient"
 
+const META_APP_ID = "2263603634045697"
+
 function AuthScreen() {
   const [isLogin, setIsLogin] = useState(true)
   const [email, setEmail] = useState("")
@@ -33,8 +35,7 @@ function AuthScreen() {
     <div style={{ minHeight: "100vh", background: "#0f172a", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "system-ui, sans-serif" }}>
       <div style={{ background: "#1e293b", padding: "40px", borderRadius: "16px", width: "100%", maxWidth: "400px", boxShadow: "0 25px 50px rgba(0,0,0,0.5)" }}>
         <div style={{ textAlign: "center", marginBottom: "32px" }}>
-          <img src="/logo.png" style={{ width: "56px", height: "56px", margin: "0 auto 16px", display: "block" }} />
-          <h1 style={{ color: "#f1f5f9", fontSize: "24px", fontWeight: "700", margin: "0 0 4px" }}>Social Gestion</h1>
+          <img src="/logo.png" style={{ width: "80px", height: "auto", margin: "0 auto 16px", display: "block" }} />
           <p style={{ color: "#94a3b8", fontSize: "14px", margin: 0 }}>Manage all your social media in one place</p>
         </div>
 
@@ -74,8 +75,7 @@ function Dashboard({ user, onSignOut }) {
     <div style={{ minHeight: "100vh", background: "#0f172a", fontFamily: "system-ui, sans-serif", display: "flex" }}>
       <div style={{ width: "240px", background: "#1e293b", padding: "24px 16px", display: "flex", flexDirection: "column" }}>
         <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "32px", padding: "0 8px" }}>
-          <img src="/logo.png" style={{ width: "36px", height: "36px" }} />
-          <span style={{ color: "#f1f5f9", fontWeight: "700", fontSize: "16px" }}>Social Gestion</span>
+          <img src="/logo.png" style={{ width: "40px", height: "auto" }} />
         </div>
 
         {tabs.map(t => (
@@ -92,7 +92,7 @@ function Dashboard({ user, onSignOut }) {
 
       <div style={{ flex: 1, padding: "32px" }}>
         {tab === "home" && <HomeTab user={user} />}
-        {tab === "connect" && <ConnectTab />}
+        {tab === "connect" && <ConnectTab user={user} />}
         {tab === "schedule" && <ScheduleTab />}
         {tab === "posts" && <PostsTab />}
         {tab === "settings" && <SettingsTab user={user} />}
@@ -107,7 +107,11 @@ function HomeTab({ user }) {
       <h2 style={{ color: "#f1f5f9", fontSize: "28px", fontWeight: "700", margin: "0 0 8px" }}>Welcome back 👋</h2>
       <p style={{ color: "#94a3b8", margin: "0 0 32px" }}>{user.email}</p>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "16px" }}>
-        {[{ label: "Connected Accounts", value: "0", icon: "🔗", color: "#3b82f6" }, { label: "Scheduled Posts", value: "0", icon: "📅", color: "#8b5cf6" }, { label: "Published Posts", value: "0", icon: "✅", color: "#10b981" }].map(card => (
+        {[
+          { label: "Connected Accounts", value: "0", icon: "🔗", color: "#3b82f6" },
+          { label: "Scheduled Posts", value: "0", icon: "📅", color: "#8b5cf6" },
+          { label: "Published Posts", value: "0", icon: "✅", color: "#10b981" }
+        ].map(card => (
           <div key={card.label} style={{ background: "#1e293b", borderRadius: "16px", padding: "24px" }}>
             <div style={{ fontSize: "32px", marginBottom: "12px" }}>{card.icon}</div>
             <div style={{ color: card.color, fontSize: "32px", fontWeight: "700" }}>{card.value}</div>
@@ -119,12 +123,25 @@ function HomeTab({ user }) {
   )
 }
 
-function ConnectTab() {
+function ConnectTab({ user }) {
+  const handleConnect = (platform) => {
+    if (platform === 'instagram' || platform === 'facebook') {
+      const authUrl = `https://www.facebook.com/v19.0/dialog/oauth?` +
+        `client_id=${META_APP_ID}` +
+        `&redirect_uri=https://socialgestion.vercel.app/auth/callback` +
+        `&scope=instagram_basic,instagram_content_publish,instagram_manage_comments,instagram_manage_messages,pages_read_engagement,pages_show_list,business_management` +
+        `&response_type=code` +
+        `&state=${user.id}`
+      window.location.href = authUrl
+    }
+  }
+
   const networks = [
     { id: "instagram", name: "Instagram", icon: "📸", color: "#e1306c", description: "Connect your Instagram Business account" },
     { id: "facebook", name: "Facebook", icon: "👤", color: "#1877f2", description: "Connect your Facebook Page" },
-    { id: "whatsapp", name: "WhatsApp", icon: "💬", color: "#25d366", description: "Connect your WhatsApp Business" },
+    { id: "whatsapp", name: "WhatsApp", icon: "💬", color: "#25d366", description: "Coming soon", disabled: true },
   ]
+
   return (
     <div>
       <h2 style={{ color: "#f1f5f9", fontSize: "28px", fontWeight: "700", margin: "0 0 8px" }}>Connect Accounts</h2>
@@ -139,7 +156,12 @@ function ConnectTab() {
                 <div style={{ color: "#94a3b8", fontSize: "13px" }}>{n.description}</div>
               </div>
             </div>
-            <button style={{ padding: "10px 20px", background: n.color, border: "none", borderRadius: "10px", color: "white", fontWeight: "700", cursor: "pointer", fontSize: "14px" }}>Connect</button>
+            <button
+              onClick={() => !n.disabled && handleConnect(n.id)}
+              disabled={n.disabled}
+              style={{ padding: "10px 20px", background: n.disabled ? "#334155" : n.color, border: "none", borderRadius: "10px", color: "white", fontWeight: "700", cursor: n.disabled ? "not-allowed" : "pointer", fontSize: "14px", opacity: n.disabled ? 0.5 : 1 }}>
+              {n.disabled ? "Soon" : "Connect"}
+            </button>
           </div>
         ))}
       </div>
@@ -204,7 +226,11 @@ export default function App() {
     return () => subscription.unsubscribe()
   }, [])
 
-  if (loading) return <div style={{ minHeight: "100vh", background: "#0f172a", display: "flex", alignItems: "center", justifyContent: "center", color: "#94a3b8", fontFamily: "system-ui" }}>Loading...</div>
+  if (loading) return (
+    <div style={{ minHeight: "100vh", background: "#0f172a", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "system-ui" }}>
+      <img src="/logo.png" style={{ width: "60px", animation: "pulse 1.5s infinite" }} />
+    </div>
+  )
 
   if (!session) return <AuthScreen />
 
