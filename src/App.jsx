@@ -157,6 +157,7 @@ function HomeTab({ user, connectedAccounts }) {
 
 function ConnectTab({ user, connectedAccounts, onRefresh }) {
   const handleConnect = (platform) => {
+    console.log("user:", user, "platform:", platform)
     if (platform === "instagram") {
       const authUrl = `https://api.instagram.com/oauth/authorize?` +
         `client_id=2263603634045697` +
