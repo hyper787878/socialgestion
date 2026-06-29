@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MedFlow — Tu consultorio, sin el caos</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f8fafc; color: #0f172a; }
+
+/* HERO */
+.hero {
+  background: linear-gradient(135deg, #0a0a1a 0%, #0d1b3e 50%, #130a2e 100%);
+  padding: 56px 32px 64px; position: relative; overflow: hidden;
+}
+.hero::before {
+  content: ''; position: absolute; top: -80px; left: -80px;
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(99,102,241,0.2) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero::after {
+  content: ''; position: absolute; bottom: -60px; right: 10%;
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, rgba(16,185,129,0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+.container { max-width: 900px; margin: 0 auto; }
+.badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.3);
+  border-radius: 20px; padding: 5px 14px; margin-bottom: 20px;
+}
+.badge span { font-size: 11px; font-weight: 600; color: #34d399; letter-spacing: 0.08em; text-transform: uppercase; }
+.hero h1 { font-size: 44px; font-weight: 800; color: white; line-height: 1.15; margin-bottom: 16px; }
+.hero h1 .grad { background: linear-gradient(90deg, #34d399, #6366f1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.hero p { font-size: 16px; color: rgba(255,255,255,0.55); line-height: 1.7; max-width: 520px; margin-bottom: 32px; }
+.stats-row { display: flex; gap: 32px; flex-wrap: wrap; }
+.stat-val { font-size: 28px; font-weight: 800; color: white; }
+.stat-val span { background: linear-gradient(90deg, #34d399, #6366f1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.stat-label { font-size: 11px; color: rgba(255,255,255,0.35); margin-top: 2px; }
+
+/* PROBLEM */
+.problem { background: #fff7ed; border-top: 3px solid #f97316; padding: 28px 32px; }
+.problem .container { display: flex; align-items: flex-start; gap: 16px; }
+.problem-icon { font-size: 28px; flex-shrink: 0; }
+.problem p { font-size: 14px; color: #92400e; line-height: 1.7; }
+.problem strong { color: #c2410c; }
+
+/* SECTIONS */
+.section { padding: 48px 32px; }
+.section.alt { background: #f1f5f9; }
+.eyebrow { font-size: 11px; font-weight: 700; color: #6366f1; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px; }
+.section-title { font-size: 30px; font-weight: 800; color: #0f172a; margin-bottom: 8px; line-height: 1.2; }
+.section-sub { font-size: 14px; color: #64748b; margin-bottom: 32px; line-height: 1.6; }
+
+/* FEATURE GRID */
+.feat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.feat {
+  background: white; border: 1px solid #e2e8f0; border-radius: 16px; padding: 24px;
+  transition: all 0.2s; cursor: default;
+}
+.feat:hover { border-color: #6366f1; box-shadow: 0 4px 24px rgba(99,102,241,0.1); transform: translateY(-2px); }
+.feat-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 14px; }
+.feat-tag { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; margin-bottom: 8px; }
+.tag-new { background: #dbeafe; color: #1d4ed8; }
+.tag-ai { background: #f3e8ff; color: #7c3aed; }
+.tag-auto { background: #d1fae5; color: #065f46; }
+.tag-smart { background: #fef3c7; color: #92400e; }
+.feat h3 { font-size: 15px; font-weight: 700; color: #0f172a; margin-bottom: 8px; }
+.feat p { font-size: 13px; color: #64748b; line-height: 1.65; }
+.feat-highlight { font-size: 12px; font-weight: 600; color: #6366f1; margin-top: 10px; }
+
+/* PATIENT FLOW */
+.flow { display: flex; gap: 0; align-items: flex-start; margin-top: 28px; }
+.flow-step { flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center; position: relative; }
+.flow-step:not(:last-child)::after {
+  content: ''; position: absolute; top: 22px; left: 58%; width: 84%; height: 1.5px;
+  background: linear-gradient(90deg, #6366f1, #e2e8f0);
+}
+.flow-ball {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; margin-bottom: 12px; position: relative; z-index: 1;
+  box-shadow: 0 4px 12px rgba(99,102,241,0.35);
+}
+.flow-step h4 { font-size: 13px; font-weight: 700; color: #0f172a; margin-bottom: 4px; }
+.flow-step p { font-size: 11px; color: #64748b; line-height: 1.5; padding: 0 8px; }
+
+/* DB PREVIEW */
+.db-preview {
+  background: linear-gradient(135deg, #0f172a, #1e3a5f);
+  border-radius: 16px; padding: 24px; margin-top: 28px;
+}
+.db-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.db-title { font-size: 13px; font-weight: 600; color: white; }
+.db-search { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 6px 12px; font-size: 12px; color: rgba(255,255,255,0.5); width: 180px; }
+.db-table { width: 100%; border-collapse: collapse; }
+.db-table th { font-size: 10px; font-weight: 600; color: rgba(255,255,255,0.4); letter-spacing: 0.08em; text-transform: uppercase; padding: 8px 12px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.db-table td { font-size: 12px; color: rgba(255,255,255,0.75); padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+.db-table tr:last-child td { border-bottom: none; }
+.status-badge { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 10px; font-weight: 600; }
+.status-ok { background: rgba(16,185,129,0.2); color: #34d399; }
+.status-warn { background: rgba(245,158,11,0.2); color: #fbbf24; }
+.status-alert { background: rgba(239,68,68,0.2); color: #f87171; }
+.avatar { width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; color: white; margin-right: 8px; }
+
+/* PRICING */
+.plans { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 28px; }
+.plan { background: white; border: 1px solid #e2e8f0; border-radius: 18px; padding: 26px; position: relative; }
+.plan.pop { background: linear-gradient(135deg, #0f172a, #1e3a5f); border-color: #6366f1; box-shadow: 0 8px 32px rgba(99,102,241,0.25); }
+.pop-badge { position: absolute; top: -11px; left: 50%; transform: translateX(-50%); background: linear-gradient(90deg, #6366f1, #8b5cf6); color: white; font-size: 10px; font-weight: 700; padding: 3px 14px; border-radius: 20px; white-space: nowrap; }
+.plan-name { font-size: 11px; font-weight: 700; color: #94a3b8; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+.pop .plan-name { color: rgba(255,255,255,0.5); }
+.plan-price { font-size: 38px; font-weight: 800; color: #0f172a; line-height: 1; margin-bottom: 4px; }
+.pop .plan-price { color: white; }
+.plan-price sub { font-size: 14px; font-weight: 400; color: #94a3b8; }
+.plan-desc { font-size: 12px; color: #64748b; margin: 8px 0 16px; line-height: 1.5; }
+.pop .plan-desc { color: rgba(255,255,255,0.45); }
+.plan-feats { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.plan-feats li { display: flex; align-items: flex-start; gap: 7px; font-size: 12px; color: #374151; line-height: 1.4; }
+.pop .plan-feats li { color: rgba(255,255,255,0.75); }
+.plan-feats li::before { content: '✓'; color: #10b981; font-weight: 700; flex-shrink: 0; }
+.plan-btn { width: 100%; margin-top: 20px; padding: 12px; border-radius: 10px; border: 1px solid #e2e8f0; background: white; color: #374151; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; transition: all 0.2s; }
+.plan-btn:hover { border-color: #6366f1; color: #6366f1; }
+.pop .plan-btn { background: linear-gradient(135deg, #6366f1, #8b5cf6); border-color: transparent; color: white; box-shadow: 0 4px 14px rgba(99,102,241,0.4); }
+.pop .plan-btn:hover { transform: translateY(-1px); }
+
+/* FORM */
+.form-section { padding: 56px 32px; background: linear-gradient(135deg, #0a0a1a 0%, #0d1b3e 50%, #130a2e 100%); }
+.form-inner { max-width: 560px; margin: 0 auto; }
+.form-inner h2 { font-size: 30px; font-weight: 800; color: white; margin-bottom: 8px; text-align: center; }
+.form-inner > p { font-size: 14px; color: rgba(255,255,255,0.5); margin-bottom: 28px; text-align: center; }
+.form-box { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 28px; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+.form-input, .form-select {
+  width: 100%; padding: 12px 14px;
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px; color: white; font-size: 13px; font-family: inherit;
+}
+.form-input:focus, .form-select:focus { outline: none; border-color: rgba(99,102,241,0.6); }
+.form-input::placeholder { color: rgba(255,255,255,0.25); }
+.form-select option { background: #1e293b; color: white; }
+.form-full { grid-column: 1 / -1; }
+.color-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.color-row label { font-size: 12px; color: rgba(255,255,255,0.5); }
+.color-picker { width: 40px; height: 40px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); cursor: pointer; padding: 2px; background: none; }
+.submit-btn { width: 100%; padding: 14px; background: linear-gradient(135deg, #6366f1, #8b5cf6); border: none; border-radius: 10px; color: white; font-size: 15px; font-weight: 700; cursor: pointer; font-family: inherit; box-shadow: 0 4px 16px rgba(99,102,241,0.4); transition: all 0.2s; margin-top: 8px; }
+.submit-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(99,102,241,0.55); }
+.success-msg { display: none; background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.3); border-radius: 10px; padding: 16px; text-align: center; color: #34d399; font-size: 14px; font-weight: 500; margin-top: 12px; }
+.success-msg.show { display: block; }
+.form-note { font-size: 11px; color: rgba(255,255,255,0.25); text-align: center; margin-top: 12px; }
+
+@media (max-width: 600px) {
+  .hero h1 { font-size: 28px; }
+  .feat-grid, .plans, .form-grid { grid-template-columns: 1fr; }
+  .flow { flex-direction: column; gap: 20px; }
+  .flow-step:not(:last-child)::after { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="container">
+    <div class="badge"><span>🏥 Software para médicos · 2026</span></div>
+    <h1>Tu consultorio,<br><span class="grad">sin el caos.</span></h1>
+    <p>Una plataforma diseñada para médicos que quieren enfocarse en sus pacientes — no en coordinar turnos, responder mensajes y perseguir análisis perdidos.</p>
+    <div class="stats-row">
+      <div>
+        <div class="stat-val"><span>70%</span></div>
+        <div class="stat-label">menos ausentismo con recordatorios</div>
+      </div>
+      <div>
+        <div class="stat-val"><span>3 hs</span></div>
+        <div class="stat-label">semanales recuperadas en coordinación</div>
+      </div>
+      <div>
+        <div class="stat-val"><span>100%</span></div>
+        <div class="stat-label">automatizable desde el día uno</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PROBLEM -->
+<div class="problem">
+  <div class="container">
+    <div class="problem-icon">⚠️</div>
+    <p><strong>El problema que resolvemos:</strong> Los médicos pierden horas cada semana coordinando turnos por teléfono, respondiendo el mismo WhatsApp decenas de veces, y atendiendo pacientes que olvidaron traer sus análisis. Todo eso tiene solución hoy — y cuesta menos de lo que perdés en un turno perdido.</p>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<div class="section">
+  <div class="container">
+    <div class="eyebrow">Qué incluye</div>
+    <div class="section-title">Todo lo que tu consultorio necesita.</div>
+    <div class="section-sub">Sin papel, sin llamadas, sin caos. Todo en un solo panel que funciona desde el celular o la computadora.</div>
+    <div class="feat-grid">
+      <div class="feat">
+        <div class="feat-icon" style="background:#dbeafe;">📅</div>
+        <span class="feat-tag tag-new">NUEVO</span>
+        <h3>Agenda online inteligente</h3>
+        <p>Tus pacientes reservan su turno desde el celular en 30 segundos, sin llamarte. Ven tu disponibilidad en tiempo real y eligen el horario que les conviene. Vos recibís una notificación y listo.</p>
+        <div class="feat-highlight">→ Adiós a las llamadas perdidas y los turnos dobles</div>
+      </div>
+      <div class="feat">
+        <div class="feat-icon" style="background:#d1fae5;">💬</div>
+        <span class="feat-tag tag-auto">AUTOMÁTICO</span>
+        <h3>Recordatorios por WhatsApp</h3>
+        <p>24 horas antes del turno, tu paciente recibe un mensaje automático confirmando la cita. Si cancela, el turno se libera solo. Sin que vos hagas nada. El ausentismo cae hasta un 70%.</p>
+        <div class="feat-highlight">→ Más turnos cumplidos, más ingresos</div>
+      </div>
+      <div class="feat">
+        <div class="feat-icon" style="background:#f3e8ff;">📋</div>
+        <span class="feat-tag tag-ai">DIGITAL</span>
+        <h3>Historia clínica digital</h3>
+        <p>Cada paciente tiene su ficha completa: consultas anteriores, diagnósticos, medicación, alergias y evolución. Accedés desde el celular o la computadora en segundos, sin buscar carpetas.</p>
+        <div class="feat-highlight">→ Todo el historial en un clic, desde cualquier lugar</div>
+      </div>
+      <div class="feat">
+        <div class="feat-icon" style="background:#fef3c7;">🔬</div>
+        <span class="feat-tag tag-smart">INTELIGENTE</span>
+        <h3>Análisis cargados antes de la consulta</h3>
+        <p>Al agendar el turno, el paciente sube sus análisis escaneados o fotografiados. Cuando llega a la consulta, vos ya los revisaste. Nunca más "me olvidé los análisis en casa".</p>
+        <div class="feat-highlight">→ Consultas más completas y eficientes</div>
+      </div>
+      <div class="feat">
+        <div class="feat-icon" style="background:#fee2e2;">📱</div>
+        <span class="feat-tag tag-new">NUEVO</span>
+        <h3>Bandeja unificada de mensajes</h3>
+        <p>Todos tus mensajes de Instagram, Facebook y WhatsApp en un solo lugar. Respondés desde un panel sin saltar entre apps. Con respuestas rápidas para las preguntas más frecuentes.</p>
+        <div class="feat-highlight">→ Un solo lugar para toda la comunicación</div>
+      </div>
+      <div class="feat">
+        <div class="feat-icon" style="background:#ecfdf5;">📊</div>
+        <span class="feat-tag tag-smart">MÉTRICAS</span>
+        <h3>Panel de pacientes y alertas</h3>
+        <p>Ves todos tus pacientes, cuándo fue su última consulta, y cuáles hace mucho que no se realizan un procedimiento. El sistema te alerta automáticamente para que puedas contactarlos.</p>
+        <div class="feat-highlight">→ Ningún paciente se pierde en el olvido</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PATIENT FLOW -->
+<div class="section alt">
+  <div class="container">
+    <div class="eyebrow">Flujo del paciente</div>
+    <div class="section-title">El paciente lo hace solo.<br>Vos no hacés nada.</div>
+    <div class="section-sub">La experiencia es tan simple que cualquier paciente — de cualquier edad — puede usarla desde el primer intento.</div>
+    <div class="flow">
+      <div class="flow-step">
+        <div class="flow-ball">📲</div>
+        <h4>Entra a tu web</h4>
+        <p>Desde el link en tu Instagram o un mensaje de WhatsApp</p>
+      </div>
+      <div class="flow-step">
+        <div class="flow-ball">📝</div>
+        <h4>Carga sus datos</h4>
+        <p>Nombre, edad, obra social y motivo de consulta</p>
+      </div>
+      <div class="flow-step">
+        <div class="flow-ball">📅</div>
+        <h4>Elige su turno</h4>
+        <p>Ve tu agenda disponible y reserva solo, sin llamarte</p>
+      </div>
+      <div class="flow-step">
+        <div class="flow-ball">📁</div>
+        <h4>Sube sus análisis</h4>
+        <p>Fotos o PDF directo desde el celular, antes de llegar</p>
+      </div>
+      <div class="flow-step">
+        <div class="flow-ball">🔔</div>
+        <h4>Recibe recordatorio</h4>
+        <p>WhatsApp automático 24hs antes del turno</p>
+      </div>
+      <div class="flow-step">
+        <div class="flow-ball">✅</div>
+        <h4>Llega a la consulta</h4>
+        <p>Vos ya tenés todo listo. La consulta empieza puntual.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DB PREVIEW -->
+<div class="section">
+  <div class="container">
+    <div class="eyebrow">Base de datos de pacientes</div>
+    <div class="section-title">Todos tus pacientes,<br>organizados y con alertas.</div>
+    <div class="section-sub">Ves de un vistazo quién necesita una consulta de seguimiento, quién hace tiempo que no viene, y quién tiene procedimientos pendientes.</div>
+    <div class="db-preview">
+      <div class="db-header">
+        <span class="db-title">👥 Pacientes — Vista general</span>
+        <input class="db-search" placeholder="🔍 Buscar paciente...">
+      </div>
+      <table class="db-table">
+        <thead>
+          <tr>
+            <th>Paciente</th>
+            <th>Última consulta</th>
+            <th>Próximo turno</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="avatar" style="background:linear-gradient(135deg,#6366f1,#8b5cf6)">MR</span>María Rodríguez</td>
+            <td>Hace 2 semanas</td>
+            <td>15 Jul · 10:00</td>
+            <td><span class="status-badge status-ok">Al día</span></td>
+          </tr>
+          <tr>
+            <td><span class="avatar" style="background:linear-gradient(135deg,#f09433,#bc1888)">CG</span>Carlos González</td>
+            <td>Hace 3 meses</td>
+            <td>Sin turno</td>
+            <td><span class="status-badge status-warn">Seguimiento</span></td>
+          </tr>
+          <tr>
+            <td><span class="avatar" style="background:linear-gradient(135deg,#10b981,#059669)">AL</span>Ana López</td>
+            <td>Hace 8 meses</td>
+            <td>Sin turno</td>
+            <td><span class="status-badge status-alert">⚠️ Contactar</span></td>
+          </tr>
+          <tr>
+            <td><span class="avatar" style="background:linear-gradient(135deg,#3b82f6,#1d4ed8)">JP</span>Juan Pérez</td>
+            <td>Hace 1 semana</td>
+            <td>22 Jul · 14:30</td>
+            <td><span class="status-badge status-ok">Al día</span></td>
+          </tr>
+          <tr>
+            <td><span class="avatar" style="background:linear-gradient(135deg,#ec4899,#be185d)">SM</span>Sofía Martínez</td>
+            <td>Hace 6 meses</td>
+            <td>Sin turno</td>
+            <td><span class="status-badge status-alert">⚠️ Contactar</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- PRICING -->
+<div class="section alt">
+  <div class="container">
+    <div class="eyebrow">Planes</div>
+    <div class="section-title">Sin letra chica.<br>Sin sorpresas.</div>
+    <div class="section-sub">Cancelás cuando querés. El primer mes es gratis para que lo pruebes sin riesgo.</div>
+    <div class="plans">
+      <div class="plan">
+        <div class="plan-name">BÁSICO</div>
+        <div class="plan-price">$49 <sub>/mes</sub></div>
+        <div class="plan-desc">Para médicos independientes que quieren empezar a automatizar su consultorio hoy.</div>
+        <ul class="plan-feats">
+          <li>Agenda online para pacientes</li>
+          <li>Recordatorios automáticos por WhatsApp</li>
+          <li>Carga de análisis pre-consulta</li>
+          <li>Base de datos de pacientes</li>
+          <li>Historia clínica digital</li>
+          <li>Hasta 150 turnos por mes</li>
+          <li>Soporte por email</li>
+        </ul>
+        <button class="plan-btn" onclick="document.getElementById('formSection').scrollIntoView({behavior:'smooth'})">Reservar mi app →</button>
+      </div>
+      <div class="plan pop">
+        <div class="pop-badge">⭐ MÁS POPULAR</div>
+        <div class="plan-name">CLÍNICA</div>
+        <div class="plan-price">$149 <sub>/mes</sub></div>
+        <div class="plan-desc">Para clínicas con múltiples profesionales que necesitan gestión centralizada y comunicación integrada.</div>
+        <ul class="plan-feats">
+          <li>Todo lo del plan Básico</li>
+          <li>Hasta 5 médicos en el mismo panel</li>
+          <li>Bandeja unificada: Instagram, Facebook y WhatsApp</li>
+          <li>Alertas automáticas de pacientes sin consulta</li>
+          <li>Panel de métricas avanzado</li>
+          <li>Turnos ilimitados</li>
+          <li>Respuestas automáticas personalizadas</li>
+          <li>Soporte prioritario 24/7</li>
+        </ul>
+        <button class="plan-btn" onclick="document.getElementById('formSection').scrollIntoView({behavior:'smooth'})">Reservar mi app →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FORM -->
+<div class="form-section" id="formSection">
+  <div class="form-inner">
+    <h2>Reservá tu app personalizada</h2>
+    <p>Completá el formulario y en menos de una semana tenés tu consultorio digital listo, con tu logo y tus colores.</p>
+    <div class="form-box">
+      <div class="form-grid">
+        <input class="form-input" type="text" placeholder="Tu nombre completo" id="fname">
+        <input class="form-input" type="email" placeholder="Tu email" id="femail">
+        <input class="form-input" type="tel" placeholder="Tu WhatsApp" id="fphone">
+        <input class="form-input" type="text" placeholder="Especialidad médica" id="fspec">
+        <input class="form-input form-full" type="text" placeholder="Nombre del consultorio o clínica" id="fclinic">
+        <input class="form-input form-full" type="text" placeholder="Dirección del consultorio" id="faddress">
+        <select class="form-select" id="fplan">
+          <option value="" disabled selected>Seleccioná un plan</option>
+          <option>Básico — $49/mes</option>
+          <option>Clínica — $149/mes</option>
+        </select>
+        <select class="form-select" id="faccounts">
+          <option value="" disabled selected>¿Cuántos médicos?</option>
+          <option>Solo yo (1 médico)</option>
+          <option>2-3 médicos</option>
+          <option>4-5 médicos</option>
+          <option>Más de 5</option>
+        </select>
+      </div>
+      <div class="color-row">
+        <label>Color principal de tu marca:</label>
+        <input type="color" class="color-picker" id="fcolor" value="#6366f1">
+        <span style="font-size:12px;color:rgba(255,255,255,0.4);">Lo usamos para personalizar tu app</span>
+      </div>
+      <input class="form-input" type="text" placeholder="Link de tu logo (Google Drive, Dropbox, etc.) — opcional" id="flogo" style="margin-bottom:8px;">
+      <button class="submit-btn" onclick="submitForm()">🚀 Reservar mi app personalizada</button>
+      <div class="success-msg" id="successMsg">
+        ✅ ¡Perfecto! Te contactamos en menos de 24 horas para coordinar los detalles y arrancar.
+      </div>
+      <p class="form-note">Sin compromiso · Primer mes gratis · Tu app lista en 7 días</p>
+    </div>
+  </div>
+</div>
+
+<script>
+function submitForm() {
+  const name = document.getElementById('fname').value;
+  const email = document.getElementById('femail').value;
+  const phone = document.getElementById('fphone').value;
+  if (!name || !email || !phone) {
+    alert('Por favor completá nombre, email y WhatsApp.');
+    return;
+  }
+  const btn = document.querySelector('.submit-btn');
+  btn.textContent = '✅ ¡Reservado!';
+  btn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+  document.getElementById('successMsg').classList.add('show');
+}
+</script>
+</body>
+</html>
